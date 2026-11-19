@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ÉLECTRO ASSIST 24H — Console d’administration</title>
+    <meta
+      name="description"
+      content="Console interne du centre de confiance ÉLECTRO ASSIST 24H : vérification des dossiers, gestion documentaire et journal d’audit."
+    />
+    <meta name="theme-color" content="#FFB300" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <script>
+      // Doc 2 §3.3 : appliquer le thème avant le premier rendu pour éviter un flash.
+      ;(function () {
+        try {
+          var preference = localStorage.getItem('ea24-admin.theme') || 'system'
+          var dark =
+            preference === 'dark' ||
+            (preference === 'system' &&
+              window.matchMedia('(prefers-color-scheme: dark)').matches)
+          var theme = dark ? 'dark' : 'light'
+          document.documentElement.dataset.theme = theme
+          document.documentElement.style.colorScheme = theme
+        } catch (error) {
+          document.documentElement.dataset.theme = 'light'
+        }
+      })()
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

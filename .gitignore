@@ -1,0 +1,42 @@
+# Dépôt backend — géré séparément
+backend/
+
+# Dépendances
+node_modules/
+.pnp
+.pnp.js
+
+# Build
+dist/
+dist-android/
+build/
+.expo/
+*.apk
+*.aab
+
+# Environnement (ne jamais commiter les secrets)
+.env
+.env.local
+.env.*.local
+
+# Vite
+.vite/
+.vite-temp/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Éditeurs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# TypeScript
+*.tsbuildinfo
