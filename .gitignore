@@ -1,6 +1,16 @@
 # Dépôt backend — géré séparément
 backend/
 
+# Fichiers internes Kiro
+.agents/
+skills-lock.json
+
+# Documents Word et notes internes
+*.docx
+DECISIONS_ETAPE_3.md
+ROADMAP_ET_SUIVI.md
+SUIVI_PLAN.md
+
 # Dépendances
 node_modules/
 .pnp
