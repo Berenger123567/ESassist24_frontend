@@ -2,16 +2,17 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import { AdminLayout } from './components/AdminLayout'
 import { RequireAuth } from './features/session/RequireAuth'
 import { AdminLoginPage } from './pages/AdminLoginPage'
+import { AuditLogsPage } from './pages/AuditLogsPage'
 import { ConsolePage } from './pages/ConsolePage'
 import { InvitationPage } from './pages/InvitationPage'
 import { InvitationsPage } from './pages/InvitationsPage'
 import { NotFoundPage } from './pages/NotFoundPage'
 import { TotpEnrollmentPage } from './pages/TotpEnrollmentPage'
+import { VerificationDetailPage } from './pages/VerificationDetailPage'
+import { VerificationsPage } from './pages/VerificationsPage'
 
 /**
- * Navigation de la console — étape 1 et 2.
- * A-01 : connexion ; V-01 : activation invitation ; TOTP : enrôlement.
- * /app/invitations : gestion des invitations (étape 2).
+ * Navigation de la console — étapes 1, 2 et 3.
  */
 export function App() {
   return (
@@ -39,6 +40,9 @@ export function App() {
       >
         <Route index element={<ConsolePage />} />
         <Route path="invitations" element={<InvitationsPage />} />
+        <Route path="verifications" element={<VerificationsPage />} />
+        <Route path="verifications/:id" element={<VerificationDetailPage />} />
+        <Route path="audit" element={<AuditLogsPage />} />
       </Route>
 
       <Route path="*" element={<NotFoundPage />} />

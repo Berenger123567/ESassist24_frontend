@@ -16,6 +16,8 @@ import { ThemeToggle } from './ThemeToggle'
 const PAGE_TITLES: Record<string, string> = {
   '/app': "Vue d'ensemble",
   '/app/invitations': 'Utilisateurs et invitations',
+  '/app/verifications': 'V\u00e9rifications',
+  '/app/audit': "Journal d'audit",
 }
 
 interface NavItem {
@@ -27,9 +29,9 @@ interface NavItem {
 
 const PILOTAGE: NavItem[] = [
   { label: "Vue d'ensemble", to: '/app', icon: LayoutDashboard },
-  { label: 'V\u00e9rifications', icon: FileSearch, tag: '\u00c93' },
+  { label: 'V\u00e9rifications', to: '/app/verifications', icon: FileSearch },
+  { label: "Journal d'audit", to: '/app/audit', icon: ScrollText },
   { label: 'Documents', icon: Files, tag: '\u00c93' },
-  { label: "Journal d'audit", icon: ScrollText, tag: '\u00c93' },
 ]
 
 const ORGANISATION: NavItem[] = [

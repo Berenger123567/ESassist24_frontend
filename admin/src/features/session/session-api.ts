@@ -126,3 +126,149 @@ export async function createInvitation(input: {
   const { data } = await api.POST('/api/v1/admin/invitations', { body: input })
   return data ?? emptyResponse()
 }
+
+// ─── Étape 3 — Vérifications ─────────────────────────────────────────────────
+
+export type VerificationSummary = components['schemas']['VerificationSummaryDto']
+export type VerificationDetail = components['schemas']['VerificationDetailDto']
+export type VerificationDecision = components['schemas']['VerificationDecisionDto']
+export type VerificationDecisionResponse = components['schemas']['VerificationDecisionResponseDto']
+export type VerificationDocument = components['schemas']['VerificationDocumentDto']
+export type VerificationPage = components['schemas']['VerificationPageDto']
+export type AuditLogResponse = components['schemas']['AuditLogResponseDto']
+export type AuditLogPage = components['schemas']['AuditLogPageDto']
+export type EvaluatorResponse = components['schemas']['EvaluatorResponseDto']
+
+export async function listVerifications(params?: {
+  status?: string
+  cursor?: string
+  limit?: number
+}): Promise<VerificationPage> {
+  const { data } = await api.GET('/api/v1/admin/verifications', {
+    params: {
+      query: {
+        status: params?.status as VerificationSummary['status'] | undefined,
+        cursor: params?.cursor,
+        limit: params?.limit,
+      },
+    },
+  })
+  return data ?? emptyResponse()
+}
+
+export async function getVerificationDetail(id: string): Promise<VerificationDetail> {
+  const { data } = await api.GET('/api/v1/admin/verifications/{id}', {
+    params: { path: { id } },
+  })
+  return data ?? emptyResponse()
+}
+
+export async function submitVerificationDecision(
+  id: string,
+  body: VerificationDecision,
+  idempotencyKey: string,
+): Promise<VerificationDecisionResponse> {
+  const { data } = await api.POST('/api/v1/admin/verifications/{id}/decision', {
+    params: {
+      path: { id },
+      header: { 'Idempotency-Key': idempotencyKey },
+    },
+    body,
+  })
+  return data ?? emptyResponse()
+}
+
+export async function getAdminDocumentViewUrl(id: string): Promise<{ viewUrl: string; expiresInSeconds: number }> {
+  const { data } = await api.GET('/api/v1/admin/documents/{id}/view-url', {
+    params: { path: { id } },
+  })
+  return data ?? emptyResponse()
+}
+
+export async function listAuditLogs(params?: {
+  cursor?: string
+  limit?: number
+  action?: string
+  actorId?: string
+}): Promise<AuditLogPage> {
+  const { data } = await api.GET('/api/v1/admin/audit-logs', {
+    params: {
+      query: {
+        cursor: params?.cursor,
+        limit: params?.limit,
+        action: params?.action,
+        actorId: params?.actorId,
+      },
+    },
+  })
+  return data ?? emptyResponse()
+}
+
+export async function listEvaluators(params?: {
+  cursor?: string
+  limit?: number
+}): Promise<components['schemas']['EvaluatorPageDto']> {
+  const { data } = await api.GET('/api/v1/admin/evaluators', {
+    params: { query: { cursor: params?.cursor, limit: params?.limit } },
+  })
+  return data ?? emptyResponse()
+}
+
+// ─── Étape 4 — Évaluations ───────────────────────────────────────────────────
+
+export type EvaluationAssignmentResponse = components['schemas']['EvaluationAssignmentResponseDto']
+export type EvaluationAssignmentPage = components['schemas']['EvaluationAssignmentPageDto']
+export type EvaluationGridResponse = components['schemas']['EvaluationGridResponseDto']
+export type EvaluationGridPage = components['schemas']['EvaluationGridPageDto']
+
+export async function listEvaluationAssignments(params?: {
+  cursor?: string
+  limit?: number
+  status?: string
+}): Promise<EvaluationAssignmentPage> {
+  const { data } = await api.GET('/api/v1/admin/evaluations/assignments', {
+    params: {
+      query: {
+        cursor: params?.cursor,
+        limit: params?.limit,
+        status: params?.status as components['schemas']['EvaluationAssignmentResponseDto']['status'] | undefined,
+      },
+    },
+  })
+  return data ?? emptyResponse()
+}
+
+export async function createEvaluationAssignment(input: {
+  profileId: string
+  evaluatorId: string
+  gridId: string
+  dueAt?: string
+  notes?: string
+}): Promise<EvaluationAssignmentResponse> {
+  const { data } = await api.POST('/api/v1/admin/evaluations/assignments', { body: input })
+  return data ?? emptyResponse()
+}
+
+export async function listEvaluationGrids(): Promise<EvaluationGridPage> {
+  const { data } = await api.GET('/api/v1/admin/evaluation-grids', {})
+  return data ?? emptyResponse()
+}
+
+// ─── RGPD — Demandes de données admin ────────────────────────────────────────
+
+export type AdminDataRequest = components['schemas']['AdminDataRequestResponseDto']
+
+export async function listAdminDataRequests(): Promise<AdminDataRequest[]> {
+  const { data } = await api.GET('/api/v1/admin/data-requests', {})
+  return Array.isArray(data) ? data : []
+}
+
+export async function updateAdminDataRequestStatus(
+  id: string,
+  input: { status: components['schemas']['DataRequestStatus']; resolutionNote?: string },
+): Promise<void> {
+  await api.PATCH('/api/v1/admin/data-requests/{id}', {
+    params: { path: { id } },
+    body: input,
+  })
+}
